@@ -1,6 +1,6 @@
 # Port plan: r9700-tune → Debian 13 / kernel 7.2 / k3s node
 
-Target: `plutos-kubernetes` (`arx-k3s-plutos-1`, k3s node `k3s-node-100`),
+Target: `plutos-kubernetes` (`k3s-plutos`, k3s node `k3s-node-100`),
 Debian 13 "trixie", kernel `7.2.6+deb13-amd64` (trixie-backports), KVM guest on a
 Proxmox host (i9-14900K), AMD Radeon AI PRO R9700 passed through at PCI
 `0000:03:00.0` (`1002:7551`, ASUS `1043:0626`).
