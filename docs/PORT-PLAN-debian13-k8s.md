@@ -1,6 +1,6 @@
 # Port plan: r9700-tune → Debian 13 / kernel 7.2 / k3s node
 
-Target: `proxmox-one-kubernetes` (`arx-k3s-proxmox-one-1`, k3s node `k3s-node-100`),
+Target: `plutos-kubernetes` (`arx-k3s-plutos-1`, k3s node `k3s-node-100`),
 Debian 13 "trixie", kernel `7.2.6+deb13-amd64` (trixie-backports), KVM guest on a
 Proxmox host (i9-14900K), AMD Radeon AI PRO R9700 passed through at PCI
 `0000:03:00.0` (`1002:7551`, ASUS `1043:0626`).
@@ -380,7 +380,12 @@ debian/
   gen-offsets.sh         # pahole -> ofs_* parameters for the running kernel
   apply-debian.sh        # discovery, self-check inputs, ordered apply (see 7.4)
   amd-sclk-cap.service   # systemd unit, ordered after the two existing units
+  amd-sclk-cap-check.service  # drift-check oneshot started by the timer
   amd-sclk-cap.timer     # optional drift check (see 7.5)
+  dropins/r9700-sclk-cap.conf # Wants= drop-in for the two existing units
+  r9700-tune.default     # -> /etc/default/r9700-tune (per-stage values)
+  install.sh             # DKMS + scripts + units; --enable after Stage D
+  Makefile
 docs/
   PORT-PLAN-debian13-k8s.md   # this file
   baseline/<date>/            # Phase 0 snapshot
