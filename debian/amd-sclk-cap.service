@@ -1,0 +1,23 @@
+[Unit]
+Description=Apply R9700 SCLK soft max and below-floor PPT offset (r9700_tune_v2)
+After=systemd-modules-load.service amd-power-tune.service amd-fan-tune.service
+# A restart of either existing unit drops the soft max and may re-commit the OD
+# table, so this unit re-runs after them. The existing units pull this one in
+# through the Wants= drop-ins (dropins/).
+PartOf=amd-power-tune.service amd-fan-tune.service
+ConditionPathExists=/sys/module/amdgpu
+ConditionPathExists=/usr/local/sbin/r9700-tune-apply
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=-/etc/default/r9700-tune
+# Fails safe (plan §7.5): the leading "-" keeps the unit active if gen-offsets.sh
+# or a self-check fails. The reason is logged to the journal and
+# /var/log/r9700-tune.log, and the card keeps running the Phase 1 native
+# profile. No restart loop.
+ExecStart=-/usr/local/sbin/r9700-tune-apply --check
+TimeoutStartSec=6min
+
+[Install]
+WantedBy=multi-user.target

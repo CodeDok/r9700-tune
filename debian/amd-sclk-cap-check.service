@@ -1,0 +1,15 @@
+[Unit]
+Description=Drift check for the R9700 SCLK soft max and PPT offset (r9700_tune_v2)
+# Only while the main unit is active: `systemctl stop amd-sclk-cap` lifts the
+# limits (plan §8) and must not be undone by the timer.
+Requisite=amd-sclk-cap.service
+After=amd-sclk-cap.service
+ConditionPathExists=/sys/module/amdgpu
+ConditionPathExists=/usr/local/sbin/r9700-tune-apply
+
+[Service]
+# No RemainAfterExit: the timer must be able to start this again every time.
+Type=oneshot
+EnvironmentFile=-/etc/default/r9700-tune
+ExecStart=-/usr/local/sbin/r9700-tune-apply --check
+TimeoutStartSec=6min

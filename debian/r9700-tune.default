@@ -1,0 +1,20 @@
+# /etc/default/r9700-tune - read by apply-debian.sh (r9700-tune-apply) and the
+# amd-sclk-cap units. The defaults are no-ops; set values per bring-up stage
+# (docs/PORT-PLAN-debian13-k8s.md §7.3), then run
+#   r9700-tune-apply --dry-run   and   r9700-tune-apply --apply
+
+# PCI address of the R9700 (not the card index: card0 is the Intel iGPU)
+PCI=0000:03:00.0
+
+# SCLK soft max in MHz, 0 = none. Stage B: 1800 -> 1500 -> 1200
+SCLK_MAX=0
+
+# OD Ppt offset in percent, 0 or negative (-60..0), 0 = stock.
+# Stage C: -35 -> -40 -> -45 -> -50
+PPT_OFFSET=0
+
+# power1_cap in microwatts, applied last in --apply mode. Must be within
+# [power1_cap_min, power1_cap_max] = [210 W, 330 W] - go below 210 W with
+# PPT_OFFSET, not here. Empty = leave it to amd-power-tune.
+# Stage C1: 300000000, C2: 210000000
+POWER1_CAP=

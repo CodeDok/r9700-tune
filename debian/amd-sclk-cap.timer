@@ -1,0 +1,13 @@
+[Unit]
+Description=Periodic drift check for the R9700 SCLK soft max and PPT offset
+Documentation=file:///usr/local/lib/r9700-tune/PORT-PLAN-debian13-k8s.md
+
+[Timer]
+# Wall-clock schedule rather than OnUnitActiveSec=: a skipped run (main unit
+# stopped or still starting) must not stall the schedule.
+OnCalendar=*:0/5
+AccuracySec=1min
+Unit=amd-sclk-cap-check.service
+
+[Install]
+WantedBy=timers.target
